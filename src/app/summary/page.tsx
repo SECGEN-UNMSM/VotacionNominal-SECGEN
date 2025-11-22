@@ -27,15 +27,16 @@ export default function SummaryPage() {
     <div className="container mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
       <Button
         onClick={() => router.push("/")}
-        className="mb-6 bg-accent hover:bg-accent/90 text-accent-foreground"
+        variant={"ghost"}
+        className="mb-6 cursor-pointer border border-stone-100"
       >
-        <ArrowLeft className="mr-2 h-4 w-4" /> Regresar a la Lista de Asistencia
+        <ArrowLeft className="mr-1 h-4 w-4" /> Regresar
       </Button>
 
       <Card className="shadow-xl">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-center text-card-foreground">
-            Reporte de Asistencia
+            Reporte de Votación Nominal
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -43,8 +44,8 @@ export default function SummaryPage() {
             <AttendanceReport attendees={attendees} />
           ) : (
             <p className="text-center text-muted-foreground py-8">
-              No hay datos de asistencia disponibles. Por favor, comienza
-              subiendo un CSV.
+              No hay datos de participantes disponibles. Por favor, comienza
+              subiendo un CSV con la lista de participantes.
             </p>
           )}
         </CardContent>
@@ -52,10 +53,11 @@ export default function SummaryPage() {
           <CardFooter className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-6 border-t">
             <ExportButton attendees={attendees} />
             <Button
+              variant={"outline"}
               onClick={handleStartNew}
-              className="w-full sm:w-auto bg-accent hover:bg-accent/90 text-accent-foreground"
+              className="w-full sm:w-auto cursor-pointer"
             >
-              <RotateCcw className="mr-2 h-5 w-5" /> Empezar una nueva sesión
+              <RotateCcw className="mr-2 h-5 w-5" /> Empezar una nueva votación
             </Button>
           </CardFooter>
         )}

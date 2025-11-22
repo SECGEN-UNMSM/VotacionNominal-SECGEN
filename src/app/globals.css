@@ -3,6 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme inline{
+  --bg-red-oscuro: #123;
+}
 
 :root {
   --font-size-base: 16px; /* Default base font size, will be updated by JS */

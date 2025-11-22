@@ -12,24 +12,23 @@ import React, {
 export interface Attendee {
   id: string;
   name: string;
-  status: "present" | "absent" | "unmarked";
+  status?: "in-favor" | "against" | "abstain";
 }
 
-export type SessionGroup = "Consejo" | "Asamblea";
-export type SessionMeeting = "Ordinaria" | "Extraordinaria";
+export type SessionGroup = "Votacion nominal";
 
 export interface SessionType {
   group: SessionGroup;
-  meeting: SessionMeeting;
 }
+
+/* present: in-favor | absent: against | unmarked: abstain */
 
 interface AttendanceContextType {
   attendees: Attendee[];
-  sessionType: SessionType | null;
   loadAttendees: (names: string[], sessionType: SessionType) => void;
   updateAttendeeStatus: (
     id: string,
-    status: "present" | "absent" | "unmarked"
+    status: "in-favor" | "against" | "abstain"
   ) => void;
   resetAttendance: () => void;
 }
@@ -81,14 +80,13 @@ export const AttendanceProvider = ({ children }: { children: ReactNode }) => {
     const newAttendees = names.map((name) => ({
       id: crypto.randomUUID(),
       name: name.trim(),
-      status: "unmarked" as "present" | "absent" | "unmarked",
     }));
     setAttendees(newAttendees);
     setSessionType(session);
   }, []);
 
   const updateAttendeeStatus = useCallback(
-    (id: string, status: "present" | "absent" | "unmarked") => {
+    (id: string, status: "in-favor" | "against" | "abstain") => {
       setAttendees((prevAttendees) =>
         prevAttendees.map((attendee) =>
           attendee.id === id ? { ...attendee, status } : attendee
@@ -112,7 +110,6 @@ export const AttendanceProvider = ({ children }: { children: ReactNode }) => {
     <AttendanceContext.Provider
       value={{
         attendees,
-        sessionType,
         loadAttendees,
         updateAttendeeStatus,
         resetAttendance,

@@ -20,11 +20,8 @@ import { useRouter } from "next/navigation";
 import {
   SkipBack,
   SkipForward,
-  CheckCircle2,
-  XCircle,
   ListChecks,
   Search,
-  Users,
 } from "lucide-react";
 
 export default function AttendanceTaking() {
@@ -57,7 +54,7 @@ export default function AttendanceTaking() {
   const currentAttendee = attendees[currentIndex];
   const progress =
     attendees.length > 0
-      ? (attendees.filter((a) => a.status !== "unmarked").length /
+      ? (attendees.filter((a) => a.status !== undefined).length /
           attendees.length) *
         100
       : 0;
@@ -79,8 +76,9 @@ export default function AttendanceTaking() {
     }
   };
 
-  const presentCount = attendees.filter((a) => a.status === "present").length;
-  const absentCount = attendees.filter((a) => a.status === "absent").length;
+  const favorCount = attendees.filter((a) => a.status === "in-favor").length;
+  const againstCount = attendees.filter((a) => a.status === "against").length;
+  const abstainCount = attendees.filter((a) => a.status === "abstain").length;
 
   if (attendees.length === 0) {
     return <p>No hay asistentes cargados. Por favor, sube un archivo CSV.</p>;
@@ -89,7 +87,8 @@ export default function AttendanceTaking() {
   return (
     <div className="container mx-auto p-4 space-y-6 min-h-screen flex flex-col">
       <div className="flex flex-col lg:flex-row gap-6 grow">
-        <Card className="shadow-xl lg:grow flex flex-col">
+        {/* Tarjeta de votación */}
+        <Card className="shadow-xl lg:grow flex flex-col rounded-2xl">
           <CardHeader>
             <Progress
               value={progress}
@@ -102,21 +101,23 @@ export default function AttendanceTaking() {
           </CardHeader>
           {currentAttendee && (
             <CardContent className="grow flex flex-col items-center justify-center space-y-8">
-              <div className="text-center p-6 bg-primary/10 rounded-lg shadow-inner">
+              <div className="text-center p-6 bg-primary/10 w-full h-32 flex justify-center items-center rounded-lg shadow-inner">
                 <h2
-                  className="text-5xl md:text-7xl font-bold text-black my-2"
+                  className="font-bold text-black my-2"
+                  style={{ fontSize: "var(--attendee-font-size, 48px)" }}
                   data-ai-hint="person name"
                 >
                   {currentAttendee.name}
                 </h2>
               </div>
 
+              {/* Botones de accion: Anterior o siguiente */}
               <div className="flex justify-center items-center space-x-6">
                 <Button
                   onClick={handlePrevious}
                   disabled={currentIndex === 0}
                   size="lg"
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground transform hover:scale-105 transition-transform h-16 text-xl"
+                  className="bg-accent hover:bg-accent/90 cursor-pointer text-accent-foreground transform hover:scale-105 transition-transform h-16 text-xl"
                 >
                   <SkipBack className="mr-2 h-7 w-7" /> Anterior
                 </Button>
@@ -124,30 +125,32 @@ export default function AttendanceTaking() {
                   onClick={handleNext}
                   disabled={currentIndex === attendees.length - 1}
                   size="lg"
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground transform hover:scale-105 transition-transform h-16 text-xl"
+                  className="bg-accent cursor-pointer hover:bg-accent/90 text-accent-foreground transform hover:scale-105 transition-transform h-16 text-xl"
                 >
                   Siguiente <SkipForward className="ml-2 h-7 w-7" />
                 </Button>
               </div>
 
+              {/* Botones de acción: A favor, En contra o Abstención */}
               <RadioGroup
-                value={currentAttendee.status}
+                key={currentAttendee.id}
+                value={currentAttendee.status ?? ""}
                 onValueChange={(status) =>
                   updateAttendeeStatus(
                     currentAttendee.id,
-                    status as "present" | "absent" | "unmarked"
+                    status as "in-favor" | "against" | "abstain"
                   )
                 }
                 className="flex flex-col sm:flex-row justify-center items-center gap-6 py-4"
               >
                 <div className="flex items-center">
                   <RadioGroupItem
-                    value="present"
-                    id={`status-present-${currentAttendee.id}`}
+                    value="in-favor"
+                    id={`status-in-favor-${currentAttendee.id}`}
                     className="peer sr-only"
                   />
                   <Label
-                    htmlFor={`status-present-${currentAttendee.id}`}
+                    htmlFor={`status-in-favor-${currentAttendee.id}`}
                     className="flex items-center justify-center w-72 h-24 p-4 border-2 rounded-lg shadow-md cursor-pointer text-2xl font-semibold
                                transition-all duration-150 ease-in-out
                                peer-data-[state=unchecked]:bg-card peer-data-[state=unchecked]:text-card-foreground peer-data-[state=unchecked]:border-border
@@ -155,17 +158,17 @@ export default function AttendanceTaking() {
                                hover:peer-data-[state=unchecked]:bg-green-50 hover:peer-data-[state=unchecked]:border-green-400
                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
-                    <CheckCircle2 className="mr-3 h-8 w-8" /> Asistió
+                    A favor
                   </Label>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center gap-4">
                   <RadioGroupItem
-                    value="absent"
-                    id={`status-absent-${currentAttendee.id}`}
+                    value="against"
+                    id={`status-against-${currentAttendee.id}`}
                     className="peer sr-only"
                   />
                   <Label
-                    htmlFor={`status-absent-${currentAttendee.id}`}
+                    htmlFor={`status-against-${currentAttendee.id}`}
                     className="flex items-center justify-center w-72 h-24 p-4 border-2 rounded-lg shadow-md cursor-pointer text-2xl font-semibold
                                transition-all duration-150 ease-in-out
                                peer-data-[state=unchecked]:bg-card peer-data-[state=unchecked]:text-card-foreground peer-data-[state=unchecked]:border-border
@@ -173,24 +176,43 @@ export default function AttendanceTaking() {
                                hover:peer-data-[state=unchecked]:bg-red-50 hover:peer-data-[state=unchecked]:border-red-400
                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
-                    <XCircle className="mr-3 h-8 w-8" /> No Asistió
+                    En contra
+                  </Label>
+                </div>
+                <div className="flex items-center">
+                  <RadioGroupItem
+                    value="abstain"
+                    id={`status-abstain-${currentAttendee.id}`}
+                    className="peer sr-only"
+                  />
+                  <Label
+                    htmlFor={`status-abstain-${currentAttendee.id}`}
+                    className="flex items-center justify-center w-72 h-24 p-4 border-2 rounded-lg shadow-md cursor-pointer text-2xl font-semibold
+                               transition-all duration-150 ease-in-out
+                               peer-data-[state=unchecked]:bg-card peer-data-[state=unchecked]:text-card-foreground peer-data-[state=unchecked]:border-border
+                               peer-data-[state=checked]:bg-yellow-600 peer-data-[state=checked]:text-white peer-data-[state=checked]:border-yellow-700
+                               hover:peer-data-[state=unchecked]:bg-red-50 hover:peer-data-[state=unchecked]:border-yellow-400
+                               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                  >
+                    Abstencion
                   </Label>
                 </div>
               </RadioGroup>
             </CardContent>
           )}
-          <CardFooter className="flex justify-center py-6">
+          <CardFooter className="flex justify-center py-6 pb-9">
             <Button
+              variant={"outline"}
               onClick={() => router.push("/summary")}
-              size="lg"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground h-16 text-xl"
+              className="py-7 text-xl cursor-pointer"
             >
-              <ListChecks className="mr-2 h-7 w-7" /> Ver Registro
+              <ListChecks className="mr-1 h-8 w-8" /> Ver Registro
             </Button>
           </CardFooter>
         </Card>
 
-        <Card className="shadow-xl lg:w-full lg:max-w-xs xl:max-w-sm flex flex-col">
+        {/* Tarjeta de Resumen */}
+        <Card className="shadow-xl lg:w-full lg:max-w-xs xl:max-w-sm flex flex-col rounded-2xl">
           <CardHeader className="pb-4">
             <CardTitle className="text-5xl text-center text-black">
               Resumen
@@ -199,34 +221,34 @@ export default function AttendanceTaking() {
           <CardContent className="grow flex flex-col space-y-6 pt-4">
             <div className="flex items-center justify-between p-4 bg-primary/10 rounded-lg">
               <div className="flex items-center">
-                <CheckCircle2 className="mr-4 h-8 w-8 text-green-600" />
-                {/* CAMBIO: Texto de "Asistentes" más grande */}
                 <span className="text-2xl md:text-3xl font-medium">
-                  Asistentes:
+                  A favor:
                 </span>
               </div>
               <span className="text-2xl md:text-3xl font-bold text-green-600">
-                {presentCount}
+                {favorCount}
               </span>
             </div>
             <div className="flex items-center justify-between p-4 bg-primary/10 rounded-lg">
               <div className="flex items-center">
-                <XCircle className="mr-4 h-8 w-8 text-red-600" />
-                {/* CAMBIO: Texto de "Ausentes" más grande */}
                 <span className="text-2xl md:text-3xl font-medium">
-                  Ausentes:
+                  En contra:
                 </span>
               </div>
               <span className="text-2xl md:text-3xl font-bold text-red-600">
-                {absentCount}
+                {againstCount}
               </span>
             </div>
             <div className="flex items-center justify-between p-4 bg-primary/10 rounded-lg">
-              <div className="flex items-center">
-                <Users className="mr-4 h-8 w-8 text-primary" />
-                {/* CAMBIO: Texto de "Total" más grande */}
-                <span className="text-2xl md:text-3xl font-medium">Total:</span>
-              </div>
+              <span className="text-2xl md:text-3xl font-medium">
+                Abstención:
+              </span>
+              <span className="text-2xl md:text-3xl font-bold text-yellow-600">
+                {abstainCount}
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-primary/10 rounded-lg">
+              <span className="text-2xl md:text-3xl font-medium">Total:</span>
               <span className="text-2xl md:text-3xl font-bold text-primary">
                 {attendees.length}
               </span>
@@ -235,6 +257,7 @@ export default function AttendanceTaking() {
         </Card>
       </div>
 
+      {/* Sección de la lista de asistentes */}
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="text-2xl mb-4">Lista de Asistentes</CardTitle>
@@ -276,18 +299,22 @@ export default function AttendanceTaking() {
                     </span>
                     <span
                       className={`text-sm capitalize font-semibold ${
-                        attendee.status === "present"
+                        attendee.status === "in-favor"
                           ? "text-green-600"
-                          : attendee.status === "absent"
+                          : attendee.status === "against"
                           ? "text-red-600"
+                          : attendee.status === "abstain"
+                          ? "text-yellow-600"
                           : "text-muted-foreground"
                       }`}
                     >
-                      {attendee.status === "present"
-                        ? "Asistió"
-                        : attendee.status === "absent"
-                        ? "No Asistió"
-                        : "Sin Marcar"}
+                      {attendee.status === "in-favor"
+                        ? "A favor"
+                        : attendee.status === "against"
+                        ? "En contra"
+                        : attendee.status === "abstain"
+                        ? "Abstención"
+                        : "Sin votar"}
                     </span>
                   </div>
                   {index < filteredAttendees.length - 1 && (

@@ -9,9 +9,19 @@ import {
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { useSettings } from "@/contexts/settings-context";
+import { useEffect } from "react";
 
 export default function AppHeader() {
   const { fontSize, setFontSize, minSize, maxSize } = useSettings();
+
+  useEffect(() => {
+    try {
+      document.documentElement.style.setProperty(
+        "--attendee-font-size",
+        `${fontSize}px`
+      );
+    } catch {}
+  }, [fontSize]);
 
   return (
     <header
