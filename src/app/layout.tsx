@@ -21,13 +21,13 @@ export default function RootLayout({
     <html lang="es">
       <AttendanceProvider>
         <body
-          className={`${sora.className} bg-background text-foreground flex flex-col min-h-screen`}
+          className={`${sora.className} bg-(--bg-rojo-oscuro) text-foreground flex flex-col min-h-screen`}
         >
           <main className="grow">
             {children}
           </main>
           <footer
-            className="w-full py-3 text-center text-sm text-stone-700 border-t border-border"
+            className="w-full py-3 text-center text-sm text-white/75 border-t border-white/25 bg-(--bg-rojo-oscuro)"
           >
             <p>&copy; Unidad de Informática - SECGEN</p>
           </footer>

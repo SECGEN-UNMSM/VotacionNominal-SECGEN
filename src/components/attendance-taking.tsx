@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import { useAttendance } from "@/contexts/attendance-context";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,24 +12,21 @@ import {
 } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import {
   SkipBack,
   SkipForward,
   ListChecks,
-  Search,
 } from "lucide-react";
 
 export default function AttendanceTaking() {
   const { attendees, updateAttendeeStatus } = useAttendance();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
+  //const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
+  /*
   const filteredAttendees = useMemo(() => {
     if (!searchTerm) {
       return attendees;
@@ -37,7 +34,7 @@ export default function AttendanceTaking() {
     return attendees.filter((attendee) =>
       attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [attendees, searchTerm]);
+  }, [attendees, searchTerm]);*/
 
   const handleNext = () => {
     if (currentIndex < attendees.length - 1) {
@@ -59,6 +56,7 @@ export default function AttendanceTaking() {
         100
       : 0;
 
+  /*
   useEffect(() => {
     if (
       currentAttendee &&
@@ -67,14 +65,15 @@ export default function AttendanceTaking() {
     ) {
       // Logic for search interaction (kept as is)
     }
-  }, [searchTerm, filteredAttendees, currentAttendee, attendees]);
+  }, [filteredAttendees, currentAttendee, attendees]);*/
 
+  /*
   const handleAttendeeSelect = (attendeeId: string) => {
     const originalIndex = attendees.findIndex((a) => a.id === attendeeId);
     if (originalIndex !== -1) {
       setCurrentIndex(originalIndex);
     }
-  };
+  };*/
 
   const favorCount = attendees.filter((a) => a.status === "in-favor").length;
   const againstCount = attendees.filter((a) => a.status === "against").length;
@@ -85,14 +84,14 @@ export default function AttendanceTaking() {
   }
 
   return (
-    <div className="container mx-auto p-4 space-y-6 min-h-screen flex flex-col">
+    <div className="container mx-auto p-4 space-y-6 flex flex-col">
       <div className="flex flex-col lg:flex-row gap-6 grow">
         {/* Tarjeta de votación */}
-        <Card className="shadow-xl lg:grow flex flex-col rounded-2xl">
+        <Card className="shadow-xl lg:grow flex flex-col rounded-2xl py-12">
           <CardHeader>
             <Progress
               value={progress}
-              className="w-full mt-2 bg-primary/20"
+              className="w-full mt-2 bg-(--bg-dorado)/20"
               aria-label={`${progress.toFixed(0)}% completado`}
             />
             <p className="text-center text-lg text-muted-foreground mt-1">{`Asistente ${
@@ -101,7 +100,7 @@ export default function AttendanceTaking() {
           </CardHeader>
           {currentAttendee && (
             <CardContent className="grow flex flex-col items-center justify-center space-y-8">
-              <div className="text-center p-6 bg-primary/10 w-full h-32 flex justify-center items-center rounded-lg shadow-inner">
+              <div className="text-center p-6 bg-(--bg-dorado)/10 w-full h-32 flex justify-center items-center rounded-lg shadow-inner">
                 <h2
                   className="font-bold text-black my-2"
                   style={{ fontSize: "var(--attendee-font-size, 48px)" }}
@@ -117,7 +116,7 @@ export default function AttendanceTaking() {
                   onClick={handlePrevious}
                   disabled={currentIndex === 0}
                   size="lg"
-                  className="bg-accent hover:bg-accent/90 cursor-pointer text-accent-foreground transform hover:scale-105 transition-transform h-16 text-xl"
+                  className="select-none bg-(--bg-boton-dorado) hover:bg-(--bg-boton-dorado)/90 cursor-pointer text-accent-foreground transform hover:scale-105 transition-transform h-16 text-xl"
                 >
                   <SkipBack className="mr-2 h-7 w-7" /> Anterior
                 </Button>
@@ -125,7 +124,7 @@ export default function AttendanceTaking() {
                   onClick={handleNext}
                   disabled={currentIndex === attendees.length - 1}
                   size="lg"
-                  className="bg-accent cursor-pointer hover:bg-accent/90 text-accent-foreground transform hover:scale-105 transition-transform h-16 text-xl"
+                  className="select-none bg-(--bg-boton-dorado) cursor-pointer hover:bg-(--bg-boton-dorado)/90 text-accent-foreground transform hover:scale-105 transition-transform h-16 text-xl"
                 >
                   Siguiente <SkipForward className="ml-2 h-7 w-7" />
                 </Button>
@@ -204,7 +203,7 @@ export default function AttendanceTaking() {
             <Button
               variant={"outline"}
               onClick={() => router.push("/summary")}
-              className="py-7 text-xl cursor-pointer"
+              className="py-7 text-xl cursor-pointer border-none bg-(--bg-boton-dorado) hover:bg-(--bg-boton-dorado)/80"
             >
               <ListChecks className="mr-1 h-8 w-8" /> Ver Registro
             </Button>
@@ -219,117 +218,49 @@ export default function AttendanceTaking() {
             </CardTitle>
           </CardHeader>
           <CardContent className="grow flex flex-col space-y-6 pt-4">
-            <div className="flex items-center justify-between p-4 bg-primary/10 rounded-lg">
-              <div className="flex items-center">
-                <span className="text-2xl md:text-3xl font-medium">
-                  A favor:
-                </span>
-              </div>
-              <span className="text-2xl md:text-3xl font-bold text-green-600">
+            <div className="flex items-center justify-between p-4 bg-(--bg-dorado)/10 rounded-lg">
+              <span className="text-2xl md:text-3xl font-medium">A favor:</span>
+              <span
+                className="text-2xl md:text-4xl font-bold text-green-600"
+                style={{ fontSize: "var(--attendee-font-size, 32px)" }}
+              >
                 {favorCount}
               </span>
             </div>
-            <div className="flex items-center justify-between p-4 bg-primary/10 rounded-lg">
-              <div className="flex items-center">
-                <span className="text-2xl md:text-3xl font-medium">
-                  En contra:
-                </span>
-              </div>
-              <span className="text-2xl md:text-3xl font-bold text-red-600">
+            <div className="flex items-center justify-between p-4 bg-(--bg-dorado)/10 rounded-lg">
+              <span className="text-2xl md:text-3xl font-medium">
+                En contra:
+              </span>
+              <span
+                className="text-2xl md:text-3xl font-bold text-red-600"
+                style={{ fontSize: "var(--attendee-font-size, 32px)" }}
+              >
                 {againstCount}
               </span>
             </div>
-            <div className="flex items-center justify-between p-4 bg-primary/10 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-(--bg-dorado)/10 rounded-lg">
               <span className="text-2xl md:text-3xl font-medium">
                 Abstención:
               </span>
-              <span className="text-2xl md:text-3xl font-bold text-yellow-600">
+              <span
+                className="text-2xl md:text-3xl font-bold text-yellow-600"
+                style={{ fontSize: "var(--attendee-font-size, 32px)" }}
+              >
                 {abstainCount}
               </span>
             </div>
-            <div className="flex items-center justify-between p-4 bg-primary/10 rounded-lg">
-              <span className="text-2xl md:text-3xl font-medium">Total:</span>
-              <span className="text-2xl md:text-3xl font-bold text-primary">
+            <div className="flex items-center justify-between p-4 bg-(--bg-dorado)/10 rounded-lg">
+              <span className="text-2xl md:text-3xl font-medium" >Total:</span>
+              <span
+                className="text-2xl md:text-3xl font-bold text-primary"
+                style={{ fontSize: "var(--attendee-font-size, 32px)" }}
+              >
                 {attendees.length}
               </span>
             </div>
           </CardContent>
         </Card>
       </div>
-
-      {/* Sección de la lista de asistentes */}
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-2xl mb-4">Lista de Asistentes</CardTitle>
-          <div className="relative mt-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-black/80" />
-            <Input
-              type="search"
-              placeholder="Buscar asistente..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-full bg-primary/10 text-black placeholder:text-black/60 focus-visible:ring-primary/80"
-              aria-label="Buscar asistente"
-            />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <ScrollArea className="h-[300px] w-full rounded-md border">
-            {filteredAttendees.length > 0 ? (
-              filteredAttendees.map((attendee, index) => (
-                <React.Fragment key={attendee.id}>
-                  <div
-                    className={`flex justify-between items-center p-3 cursor-pointer hover:bg-primary/20 ${
-                      attendee.id === currentAttendee?.id
-                        ? "bg-primary/20 shadow-md ring-2 ring-primary"
-                        : ""
-                    }`}
-                    onClick={() => handleAttendeeSelect(attendee.id)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        handleAttendeeSelect(attendee.id);
-                      }
-                    }}
-                    aria-label={`Seleccionar ${attendee.name}`}
-                  >
-                    <span className={`font-medium text-black`}>
-                      {attendee.name}
-                    </span>
-                    <span
-                      className={`text-sm capitalize font-semibold ${
-                        attendee.status === "in-favor"
-                          ? "text-green-600"
-                          : attendee.status === "against"
-                          ? "text-red-600"
-                          : attendee.status === "abstain"
-                          ? "text-yellow-600"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      {attendee.status === "in-favor"
-                        ? "A favor"
-                        : attendee.status === "against"
-                        ? "En contra"
-                        : attendee.status === "abstain"
-                        ? "Abstención"
-                        : "Sin votar"}
-                    </span>
-                  </div>
-                  {index < filteredAttendees.length - 1 && (
-                    <Separator className="my-0" />
-                  )}
-                </React.Fragment>
-              ))
-            ) : (
-              <p className="p-4 text-center text-muted-foreground">
-                No se encontraron asistentes con ese nombre.
-              </p>
-            )}
-          </ScrollArea>
-        </CardContent>
-      </Card>
     </div>
   );
 }

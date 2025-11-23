@@ -4,7 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline{
-  --bg-red-oscuro: #123;
+  --bg-rojo-oscuro: #7C0821;
+  --bg-crema: #fdfafb;
+  --bg-dorado: #E0B625;
+  --bg-boton-dorado: #EBC747;
+  --bg-dorado-oscuro: #E6B91A;
 }
 
 :root {

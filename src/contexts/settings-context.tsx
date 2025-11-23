@@ -12,7 +12,7 @@ import React, {
 const LOCAL_STORAGE_KEY = "app_settings";
 const DEFAULT_FONT_SIZE = 16;
 const MIN_FONT_SIZE = 14;
-const MAX_FONT_SIZE = 24;
+const MAX_FONT_SIZE = 36;
 
 interface SettingsContextType {
   fontSize: number;
@@ -40,6 +40,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
           savedFontSize >= MIN_FONT_SIZE &&
           savedFontSize <= MAX_FONT_SIZE
         ) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setFontSizeState(savedFontSize);
         }
       }

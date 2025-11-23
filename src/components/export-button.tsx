@@ -222,7 +222,7 @@ export default function ExportButton({}: ExportButtonProps) {
   return (
     <Button
       onClick={handleExport}
-      className="w-full sm:w-auto cursor-pointer"
+      className="w-full sm:w-auto cursor-pointer bg-(--bg-dorado) text-black hover:bg-(--bg-dorado)/90"
       disabled={attendees.length === 0}
     >
       <Download className="mr-2 h-5 w-5" />

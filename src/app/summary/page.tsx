@@ -28,7 +28,7 @@ export default function SummaryPage() {
       <Button
         onClick={() => router.push("/")}
         variant={"ghost"}
-        className="mb-6 cursor-pointer border border-stone-100"
+        className="mb-6 cursor-pointer border border-(--bg-dorado)/50 text-(--bg-dorado) hover:bg-(--bg-dorado)/25 hover:text-(--bg-dorado) font-normal"
       >
         <ArrowLeft className="mr-1 h-4 w-4" /> Regresar
       </Button>
@@ -55,7 +55,7 @@ export default function SummaryPage() {
             <Button
               variant={"outline"}
               onClick={handleStartNew}
-              className="w-full sm:w-auto cursor-pointer"
+              className="w-full sm:w-auto cursor-pointer border-yellow-600 text-yellow-600 hover:bg-(--bg-dorado)/15 hover:text-yellow-600"
             >
               <RotateCcw className="mr-2 h-5 w-5" /> Empezar una nueva votación
             </Button>

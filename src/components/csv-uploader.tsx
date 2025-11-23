@@ -82,6 +82,7 @@ export default function CsvUploader() {
           title: "CSV subido con éxito.",
           text: `${names.length} asistentes cargados correctamente.`,
           icon: "success",
+          confirmButtonColor: "#E0B625",
         });
         loadAttendees(names, { group: "Votacion nominal" });
       } catch (error) {
@@ -137,7 +138,7 @@ export default function CsvUploader() {
                 type="file"
                 accept=".csv"
                 onChange={handleFileChange}
-                className="cursor-pointer file:text-black bg-primary/10 text-black placeholder:text-black/60 focus-visible:ring-primary/80 border-black/30"
+                className="cursor-pointer file:text-black bg-(--bg-dorado)/10 text-black placeholder:text-black/60 focus-visible:ring-(--bg-dorado)/80 border-(--bg-dorado)/50"
                 aria-label="Subir archivo CSV"
               />
               <p className="text-xs text-left text-muted-foreground pl-2">
@@ -149,7 +150,7 @@ export default function CsvUploader() {
               variant={"default"}
               onClick={handleFileUpload}
               disabled={isLoading || !file}
-              className="w-full cursor-pointer"
+              className="w-full cursor-pointer bg-(--bg-dorado) text-black hover:bg-(--bg-dorado)/80"
             >
               <Upload className="mr-2 h-5 w-5" />
               {isLoading ? "Procesando..." : "Subir e Iniciar"}
