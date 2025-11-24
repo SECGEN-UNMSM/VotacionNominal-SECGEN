@@ -51,14 +51,14 @@ export default function AttendanceReport({ attendees }: AttendanceReportProps) {
         </CardContent>
       </Card>
 
-      <div className="flex gap-6 w-full">
+      <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 w-full">
         {/* Tarjeta de la sección a favor. */}
         <Card className="shadow-md flex-1">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-xl font-semibold">A favor</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-bold text-green-500">
+            <div className="text-4xl font-bold text-green-900">
               {favorAttendees.length}
             </div>
             <p className="text-xs text-muted-foreground">

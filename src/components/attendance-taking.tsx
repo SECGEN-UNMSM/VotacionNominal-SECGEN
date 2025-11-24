@@ -100,7 +100,7 @@ export default function AttendanceTaking() {
           </CardHeader>
           {currentAttendee && (
             <CardContent className="grow flex flex-col items-center justify-center space-y-8">
-              <div className="text-center p-6 bg-(--bg-dorado)/10 w-full h-32 flex justify-center items-center rounded-lg shadow-inner">
+              <div className="text-center p-6 bg-(--bg-dorado)/10 w-full h-84 md:h-32 flex justify-center items-center rounded-lg shadow-inner">
                 <h2
                   className="font-bold text-black my-2"
                   style={{ fontSize: "var(--attendee-font-size, 48px)" }}
@@ -111,7 +111,7 @@ export default function AttendanceTaking() {
               </div>
 
               {/* Botones de accion: Anterior o siguiente */}
-              <div className="flex justify-center items-center space-x-6">
+              <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
                 <Button
                   onClick={handlePrevious}
                   disabled={currentIndex === 0}
@@ -140,9 +140,9 @@ export default function AttendanceTaking() {
                     status as "in-favor" | "against" | "abstain"
                   )
                 }
-                className="flex flex-col sm:flex-row justify-center items-center gap-6 py-4"
+                className="flex flex-col md:grid md:grid-cols-3 justify-center items-center gap-6 py-4"
               >
-                <div className="flex items-center">
+                <div className="flex flex-1 items-center">
                   <RadioGroupItem
                     value="in-favor"
                     id={`status-in-favor-${currentAttendee.id}`}
@@ -153,14 +153,14 @@ export default function AttendanceTaking() {
                     className="flex items-center justify-center w-72 h-24 p-4 border-2 rounded-lg shadow-md cursor-pointer text-2xl font-semibold
                                transition-all duration-150 ease-in-out
                                peer-data-[state=unchecked]:bg-card peer-data-[state=unchecked]:text-card-foreground peer-data-[state=unchecked]:border-border
-                               peer-data-[state=checked]:bg-green-600 peer-data-[state=checked]:text-white peer-data-[state=checked]:border-green-700
+                               peer-data-[state=checked]:bg-green-800 peer-data-[state=checked]:text-white peer-data-[state=checked]:border-green-900
                                hover:peer-data-[state=unchecked]:bg-green-50 hover:peer-data-[state=unchecked]:border-green-400
                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     A favor
                   </Label>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-1 items-center gap-4">
                   <RadioGroupItem
                     value="against"
                     id={`status-against-${currentAttendee.id}`}
@@ -178,7 +178,7 @@ export default function AttendanceTaking() {
                     En contra
                   </Label>
                 </div>
-                <div className="flex items-center">
+                <div className="flex flex-1 items-center">
                   <RadioGroupItem
                     value="abstain"
                     id={`status-abstain-${currentAttendee.id}`}
@@ -221,7 +221,7 @@ export default function AttendanceTaking() {
             <div className="flex items-center justify-between p-4 bg-(--bg-dorado)/10 rounded-lg">
               <span className="text-2xl md:text-3xl font-medium">A favor:</span>
               <span
-                className="text-2xl md:text-4xl font-bold text-green-600"
+                className="text-2xl md:text-4xl font-bold text-green-800"
                 style={{ fontSize: "var(--attendee-font-size, 32px)" }}
               >
                 {favorCount}

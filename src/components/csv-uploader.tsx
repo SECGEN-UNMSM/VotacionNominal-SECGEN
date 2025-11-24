@@ -127,7 +127,7 @@ export default function CsvUploader() {
         <Card className="w-full max-w-md shadow-lg rounded-xl flex flex-col justify-center items-center">
           <CardHeader>
             <CardTitle className="text-2xl text-center">
-              Subir lista de asistencia
+              Votación Nominal
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-6">

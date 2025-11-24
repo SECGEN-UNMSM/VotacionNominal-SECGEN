@@ -2,7 +2,6 @@
 import { Attendee, useAttendance } from "@/contexts/attendance-context"; 
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Swal from "sweetalert2";
@@ -42,16 +41,17 @@ const getBase64ImageFromURL = (url: string): Promise<string> => {
 };
 
 export default function ExportButton({}: ExportButtonProps) {
-  const { toast } = useToast();
   const { attendees } = useAttendance();
 
   const handleExport = async () => {
     if (attendees.length === 0) {
-      toast({
-        title: "Sin Datos",
-        description: "No hay datos de asistencia para exportar.",
-        variant: "destructive",
-      });
+      Swal.fire(
+        {
+          title: "Sin datos",
+          text: "No hay datos de asistencia para exportar.",
+          icon: "error",
+        }
+      )
       return;
     }
 
